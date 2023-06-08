@@ -1,7 +1,31 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { ProgressInfo } from 'electron-updater'
 
-const api = {}
+const api = {
+  analyze: (articleUrl: string, articleClickNumber: number): void => {
+    ipcRenderer.send('analyze', articleUrl, articleClickNumber)
+  },
+  analyzeResult: (callback: (clickCount: string) => void): void => {
+    ipcRenderer.on('analyze-result', (_event, clickCount: string) => callback(clickCount))
+  },
+  contextMenu: (): void => {
+    ipcRenderer.send('contextMenu')
+  },
+  //下载进度条
+  downloadProgress: (callback: (progress: ProgressInfo) => void): void => {
+    ipcRenderer.on('downloadProgress', (_event, progress) => {
+      callback(progress)
+    })
+  },
+  minimize: (): void => {
+    ipcRenderer.send('minimize')
+  },
+  //退出应用
+  quit: (): void => {
+    ipcRenderer.send('quit')
+  }
+}
 
 if (process.contextIsolated) {
   try {

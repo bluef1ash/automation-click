@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: automation
+appId: com.github.bluef1ash.automation-click
+productName: automation click
 directories:
   buildResources: build
 files:
@@ -13,10 +13,10 @@ asarUnpack:
   - resources/**
 afterSign: build/notarize.js
 win:
-  executableName: automation
+  executableName: 自动点击小程序
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
-  shortcutName: ${productName}
+  shortcutName: 自动点击小程序
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
 mac:

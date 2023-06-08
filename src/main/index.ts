@@ -2,17 +2,32 @@ import { app, BrowserWindow, shell } from 'electron'
 import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import './window'
+import './autoUpdater'
+import './analyze'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 430,
+    height: 328,
     show: false,
     autoHideMenuBar: true,
+    titleBarStyle: 'hidden',
+    frame: false,
+    alwaysOnTop: true,
+    resizable: false,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      nodeIntegration: true,
+      webSecurity: false,
+      allowRunningInsecureContent: true,
+      contextIsolation: false,
+      webviewTag: true,
+      spellcheck: false,
+      disableHtmlFullscreenWindowResize: true
     }
   })
 
@@ -26,18 +41,17 @@ function createWindow(): void {
   })
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
-    const { default: installExtension } = require('electron-devtools-installer')
-    const vueDevtoolsBeta = { id: 'ljjemllljcmogpfapbkkighbhhppjdbg', electron: '>=1.2.1' }
-    installExtension(vueDevtoolsBeta).then()
-    mainWindow.webContents.openDevTools()
+    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL']).then()
+    const devtools = new BrowserWindow({ autoHideMenuBar: true })
+    mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
+    installExtension(VUEJS_DEVTOOLS).then()
+    mainWindow.webContents.openDevTools({ mode: 'detach' })
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    mainWindow.loadFile(join(__dirname, '../renderer/index.html')).then()
   }
 }
 
 app.whenReady().then(() => {
-  // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)

@@ -2,6 +2,7 @@
 *.jsx linguist-language=JavaScript
 *.ts linguist-language=TypeScript
 *.tsx linguist-language=TypeScript
+*.vue linguist-language=Vue
 *.css linguist-language=CSS
 *.html linguist-language=HTML
 *.jsp linguist-language=Java
@@ -35,6 +36,7 @@
 *.ts            text
 *.tsx           text
 *.jsx           text
+*.vue           text
 
 # These files are binary and should be left untouched
 # (binary is a macro for -text -diff)
@@ -43,6 +45,7 @@
 *.ear           binary
 *.gif           binary
 *.ico           binary
+*.icns           binary
 *.jar           binary
 *.jpg           binary
 *.jpeg          binary
