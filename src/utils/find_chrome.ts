@@ -3,6 +3,11 @@ const fs = require('fs')
 const path = require('path')
 const newLineRegex = /\r?\n/
 
+export interface FindChromeTyping {
+  executablePath: string
+  type: string
+}
+
 function darwin(canary): string {
   const LSREGISTER =
     '/System/Library/Frameworks/CoreServices.framework' +
@@ -193,7 +198,7 @@ function findChromeExecutables(folder: string): string[] {
   }
 }*/
 
-async function findChrome(options?): Promise<{ executablePath: string; type: string }> {
+async function findChrome(options?): Promise<FindChromeTyping> {
   if (typeof options !== 'undefined' && options.executablePath) {
     return { executablePath: options.executablePath, type: 'user' }
   }

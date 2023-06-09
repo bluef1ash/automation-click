@@ -14,7 +14,7 @@ const analyzeHandle = async (): Promise<void> => {
     return
   }
   runBtnIsLoading.value = true
-  window.api.analyze(articleUrl.value, articleClickNumber.value)
+  window.api.analyze(config.chromePath, articleUrl.value, articleClickNumber.value)
   window.api.analyzeResult((clickCount) => {
     if (clickCount !== '-1') {
       proxy.$message.success('运行完成，最后一次点击量为：' + clickCount)
@@ -30,8 +30,8 @@ const analyzeHandle = async (): Promise<void> => {
   <el-container>
     <el-main>
       <el-input v-model="articleUrl" placeholder="请输入需要点击的文章地址" size="large" />
-      <div class="mt-5 bg-blend-color flex justify-around">
-        <label for="article_click_number">点击量</label>
+      <div class="mt-5 bg-blend-color flex justify-around items-center">
+        <label for="article_click_number" class="click-number-label">点击量</label>
         <el-input-number
           id="article_click_number"
           v-model="articleClickNumber"
@@ -55,4 +55,8 @@ const analyzeHandle = async (): Promise<void> => {
   </el-container>
 </template>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.click-number-label {
+  font-size: 0.9rem;
+}
+</style>

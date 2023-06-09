@@ -1,15 +1,38 @@
 import { ipcMain } from 'electron'
 import PuppeteerHelper from '../utils/PuppeteerHelper'
+import { FindChromeTyping } from '../utils/find_chrome'
+import { PuppeteerNodeLaunchOptions } from 'puppeteer-core'
 
-ipcMain.on('analyze', (event, articleUrl: string, articleClickNumber: number) => {
-  analyzer(articleUrl, articleClickNumber)
-    .then((result) => event.reply('analyze-result', result))
-    .catch(() => event.reply('analyze-result', '-1'))
-})
+ipcMain.on(
+  'analyze',
+  (event, chromePath: string, articleUrl: string, articleClickNumber: number) => {
+    analyzer(JSON.parse(chromePath), articleUrl, articleClickNumber)
+      .then((result) => event.reply('analyze-result', result))
+      .catch(() => event.reply('analyze-result', '-1'))
+  }
+)
 
-const analyzer = async (url: string, clickCount: number): Promise<string> => {
+const analyzer = async (
+  { executablePath }: FindChromeTyping,
+  url: string,
+  clickCount: number
+): Promise<string> => {
   let clickCountForWeb = '0'
-  const puppeteerHelper = PuppeteerHelper.getInstance()
+  const puppeteerLaunchOptions: PuppeteerNodeLaunchOptions = {
+    headless: 'new',
+    executablePath,
+    ignoreDefaultArgs: ['--enable-automation'],
+    args: [
+      '--disable-gpu',
+      '--disable-dev-shm-usage',
+      '--disable-setuid-sandbox',
+      '--no-first-run',
+      '--no-sandbox',
+      '--no-zygote'
+      // '--single-process'
+    ]
+  }
+  const puppeteerHelper = PuppeteerHelper.getInstance(puppeteerLaunchOptions)
   const headers = {
     'User-Agent':
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36'
@@ -29,7 +52,7 @@ const analyzer = async (url: string, clickCount: number): Promise<string> => {
           }
           return '0'
         }, url)
-        console.log(`点击量：${clickCountForWeb}，第${i}次点击`)
+        console.log(`点击量：${clickCountForWeb}，第${i + 1}次点击`)
       }
     })
   }

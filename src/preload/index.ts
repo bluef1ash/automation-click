@@ -1,13 +1,25 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { ProgressInfo } from 'electron-updater'
+import { FindChromeTyping } from '../utils/find_chrome'
 
 const api = {
-  analyze: (articleUrl: string, articleClickNumber: number): void => {
-    ipcRenderer.send('analyze', articleUrl, articleClickNumber)
+  analyze: (chromePath: FindChromeTyping, articleUrl: string, articleClickNumber: number): void => {
+    ipcRenderer.send('analyze', JSON.stringify(chromePath), articleUrl, articleClickNumber)
   },
   analyzeResult: (callback: (clickCount: string) => void): void => {
     ipcRenderer.on('analyze-result', (_event, clickCount: string) => callback(clickCount))
+  },
+  findChrome: (): void => {
+    ipcRenderer.send('find-chrome')
+  },
+  findChromeResult: (callback: (findChromeTyping: FindChromeTyping) => void): void => {
+    ipcRenderer.on('find-chrome-result', (_event, findChromeTyping: FindChromeTyping) =>
+      callback(findChromeTyping)
+    )
+  },
+  openFindChromeDialog: (): string => {
+    return ipcRenderer.sendSync('open-find-chrome-dialog')
   },
   contextMenu: (): void => {
     ipcRenderer.send('contextMenu')

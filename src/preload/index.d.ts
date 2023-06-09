@@ -1,11 +1,19 @@
-import { ElectronAPI } from '@electron-toolkit/preload'
-
 export declare global {
+  import { ElectronAPI } from '@electron-toolkit/preload'
+  import { FindChromeTyping } from '../utils/find_chrome'
+
   interface Window {
     electron: ElectronAPI
     api: {
-      analyze: (articleUrl: string, articleClickNumber: number) => void
+      analyze: (
+        chromePath: FindChromeTyping,
+        articleUrl: string,
+        articleClickNumber: number
+      ) => void
       analyzeResult: (callback: (clickCount: string) => void) => void
+      findChrome: () => void
+      findChromeResult: (callback: (findChromeTyping: FindChromeTyping) => void) => void
+      openFindChromeDialog: () => string
       contextMenu: () => void
       downloadProgress: (callback: (progress: ProgressInfo) => void) => void
       minimize: () => void

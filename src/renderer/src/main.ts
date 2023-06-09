@@ -1,6 +1,7 @@
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import '@icon-park/vue/styles/index.css'
+import 'animate.css'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import resetMessage from '@utils/resetMessage'

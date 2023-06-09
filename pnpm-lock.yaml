@@ -17,9 +17,12 @@ dependencies:
   '@icon-park/vue-next':
     specifier: ^1.4.2
     version: 1.4.2(vue@3.3.4)
+  animate.css:
+    specifier: ^4.1.1
+    version: 4.1.1
   electron-log:
-    specifier: ^4.4.8
-    version: 4.4.8
+    specifier: ^5.0.0-beta.2
+    version: 5.0.0-beta.2
   electron-updater:
     specifier: ^5.3.0
     version: 5.3.0
@@ -1838,6 +1841,10 @@ packages:
       uri-js: 4.4.1
     dev: true
 
+  /animate.css@4.1.1:
+    resolution: {integrity: sha512-+mRmCTv6SbCmtYJCN4faJMNFVNN5EuCTTprDTAo7YzIGji2KADmakjVA3+8mVDkZ2Bf09vayB35lSQIex2+QaQ==}
+    dev: false
+
   /ansi-escapes@4.3.2:
     resolution: {integrity: sha512-gKXj5ALrKWQLsYG9jlTRmR/xKluxHV+Z9QEwNIgCfM1/uwPMCuzVVnh5mwTd+OuBZcwSIMbqssNWRm1lE51QaQ==}
     engines: {node: '>=8'}
@@ -2878,8 +2885,9 @@ packages:
       unzip-crx-3: 0.2.0
     dev: true
 
-  /electron-log@4.4.8:
-    resolution: {integrity: sha512-QQ4GvrXO+HkgqqEOYbi+DHL7hj5JM+nHi/j+qrN9zeeXVKy8ZABgbu4CnG+BBqDZ2+tbeq9tUC4DZfIWFU5AZA==}
+  /electron-log@5.0.0-beta.2:
+    resolution: {integrity: sha512-KabZuu+Q70MWxTIlqiXcmLgGo5mzxR3JQhZMuVyyEWR5B7wDdB+yF4Jc3rbk9v5onpFjCSSK1zWO+o0t1S01VQ==}
+    engines: {electron: '>= 13', node: '>= 14'}
     dev: false
 
   /electron-osx-sign@0.6.0:

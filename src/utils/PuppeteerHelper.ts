@@ -45,7 +45,7 @@ class PuppeteerHelper {
   private _pageNum: number[] = []
   private _replaceTimer: number[] = []
   private readonly _puppeteerLaunchOptions: PuppeteerNodeLaunchOptions = {
-    headless: true, // 以 无头模式（隐藏浏览器界面）运行浏览器
+    headless: 'new', // 以 无头模式（隐藏浏览器界面）运行浏览器
     ignoreDefaultArgs: ['--enable-automation'],
     args: [
       '--disable-gpu', // GPU硬件加速
@@ -97,9 +97,14 @@ class PuppeteerHelper {
    * @param {number} num 编号
    * */
   private async _generateBrowser(num): Promise<Browser> {
-    const findChromePath = await findChrome()
-    const executablePath = findChromePath.executablePath
-    const browser = await puppeteer.launch({ ...this._puppeteerLaunchOptions, executablePath })
+    if (
+      typeof this._puppeteerLaunchOptions.executablePath === 'undefined' ||
+      this._puppeteerLaunchOptions.executablePath === ''
+    ) {
+      const { executablePath } = await findChrome()
+      this._puppeteerLaunchOptions.executablePath = executablePath
+    }
+    const browser = await puppeteer.launch(this._puppeteerLaunchOptions)
     this._wseList[num] = browser.wsEndpoint()
     this._pageNum[num] = 1
     return browser

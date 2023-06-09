@@ -4,7 +4,8 @@ import { ref } from 'vue'
 export const useConfigStore = defineStore('counter', () => {
   const config = ref({
     page: 'analyze',
-    runBtnIsDisabled: false
+    runBtnIsDisabled: false,
+    chromePath: { executablePath: '', type: '' }
   })
 
   const updateConfig = (): void => {}

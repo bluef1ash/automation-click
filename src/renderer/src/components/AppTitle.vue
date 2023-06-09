@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { Close, Config, Minus } from '@icon-park/vue-next'
+import { defineProps } from 'vue'
+import { ClickTap, Close, Config, Minus } from '@icon-park/vue-next'
+import { useConfigStore } from '@renderer/stores/useConfigStore'
 
-const chooseConfig = (): void => {}
+const { config: configStore } = useConfigStore()
+const { height } = defineProps({ height: { type: String, default: '130px' } })
 
 const minimize = (): void => {
   window.api.minimize()
@@ -14,7 +17,22 @@ const quit = (): void => {
 
 <template>
   <div class="flex justify-end title">
-    <config title="设置" theme="outline" size="24" class="icon" @click="chooseConfig" />
+    <config
+      v-if="configStore.page === 'analyze'"
+      title="设置"
+      theme="outline"
+      size="24"
+      class="icon"
+      @click="configStore.page = 'config'"
+    />
+    <click-tap
+      v-else
+      title="自动点击"
+      theme="outline"
+      size="24"
+      class="icon"
+      @click="configStore.page = 'analyze'"
+    />
     <minus title="最小化" theme="outline" size="24" class="icon minus" @click="minimize" />
     <close title="退出" theme="outline" size="24" class="icon close" @click="quit" />
   </div>
@@ -23,8 +41,8 @@ const quit = (): void => {
 <style scoped lang="less">
 .title {
   -webkit-app-region: drag;
-  height: 130px;
-  background: -webkit-gradient(linear, left top, left bottom, from(#70a1ff), to(#1e90ff));
+  height: v-bind(height);
+  background: -webkit-gradient(linear, left top, left bottom, from(#70a1ff), to(#81a9c1));
 
   .icon {
     width: 30px;

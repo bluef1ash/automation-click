@@ -13,8 +13,10 @@ const contextMenu = (): void => window.api.contextMenu()
     <main class="relative" @contextmenu="contextMenu">
       <Updater />
       <section>
-        <Analyze v-if="config.page === 'analyze'" />
-        <Setting v-else />
+        <transition enter-active-class="animate__animated animate__flipInY">
+          <Analyze v-if="config.page === 'analyze'" />
+          <Setting v-else />
+        </transition>
       </section>
     </main>
   </Suspense>

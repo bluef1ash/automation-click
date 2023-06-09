@@ -3,9 +3,11 @@ import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import { log } from 'electron-log'
 import './window'
 import './autoUpdater'
 import './analyze'
+import './findChrome'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -17,6 +19,7 @@ function createWindow(): void {
     frame: false,
     alwaysOnTop: true,
     resizable: false,
+    transparent: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -49,6 +52,9 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html')).then()
   }
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  log.initialize({ spyRendererConsole: true })
 }
 
 app.whenReady().then(() => {
