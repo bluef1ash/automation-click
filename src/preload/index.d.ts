@@ -14,6 +14,7 @@ export declare global {
       findChrome: () => void
       findChromeResult: (callback: (findChromeTyping: FindChromeTyping) => void) => void
       openFindChromeDialog: () => string
+      clickCount: (callback: (clickCountForWeb: string, clickCount: number) => void) => void
       contextMenu: () => void
       downloadProgress: (callback: (progress: ProgressInfo) => void) => void
       minimize: () => void

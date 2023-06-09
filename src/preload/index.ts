@@ -21,6 +21,11 @@ const api = {
   openFindChromeDialog: (): string => {
     return ipcRenderer.sendSync('open-find-chrome-dialog')
   },
+  clickCount: (callback: (clickCountForWeb: string, clickCount: number) => void): void => {
+    ipcRenderer.on('click-count', (_event, clickCountForWeb: string, clickCount: number) =>
+      callback(clickCountForWeb, clickCount)
+    )
+  },
   contextMenu: (): void => {
     ipcRenderer.send('contextMenu')
   },

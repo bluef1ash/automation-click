@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron'
+import { BrowserWindow, ipcMain } from 'electron'
 import PuppeteerHelper from '../utils/PuppeteerHelper'
 import { FindChromeTyping } from '../utils/find_chrome'
 import { PuppeteerNodeLaunchOptions } from 'puppeteer-core'
@@ -48,11 +48,14 @@ const analyzer = async (
         clickCountForWeb = await page.evaluate((u) => {
           if (u.indexOf('club.autohome') > -1) {
             const elementName = 'span.post-handle-view strong'
-            return document.querySelector(elementName)!.innerHTML
+            const clickNum = document.querySelector(elementName)!.innerHTML
+            return clickNum
           }
           return '0'
         }, url)
-        console.log(`点击量：${clickCountForWeb}，第${i + 1}次点击`)
+        BrowserWindow.getAllWindows().map((w) =>
+          w.webContents.send('click-count', clickCountForWeb, i + 1)
+        )
       }
     })
   }

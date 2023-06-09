@@ -15,6 +15,9 @@ const analyzeHandle = async (): Promise<void> => {
   }
   runBtnIsLoading.value = true
   window.api.analyze(config.chromePath, articleUrl.value, articleClickNumber.value)
+  window.api.clickCount((clickCountForWeb: string, clickCount: number) => {
+    proxy.$message.info(`文章点击次数为：${clickCountForWeb}，程序点击次数：${clickCount}`)
+  })
   window.api.analyzeResult((clickCount) => {
     if (clickCount !== '-1') {
       proxy.$message.success('运行完成，最后一次点击量为：' + clickCount)
