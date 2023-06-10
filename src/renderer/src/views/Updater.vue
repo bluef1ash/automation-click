@@ -23,7 +23,7 @@ window.api.updateDownloaded(() => {
 
 <template>
   <el-progress
-    v-if="useConfigStore.isUpdating"
+    v-if="config.isUpdating"
     :percentage="progress.percent"
     stroke-width="2"
     :show-text="false"
