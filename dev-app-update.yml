@@ -1,3 +1,5 @@
-provider: generic
-url: https://example.com/auto-updates
+owner: bluef1ash
+repo: automation-click
+provider: github
+releaseType: release
 updaterCacheDirName: automation-updater

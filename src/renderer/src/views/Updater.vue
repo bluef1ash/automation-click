@@ -1,30 +1,33 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ProgressInfo } from 'builder-util-runtime/out/ProgressCallbackTransform'
+import { useConfigStore } from '../stores/useConfigStore'
 
+const { config } = useConfigStore()
 //下载进度条
-const progress = ref<ProgressInfo>()
+const progress = ref<ProgressInfo>({
+  total: 0,
+  delta: 0,
+  transferred: 0,
+  percent: 0,
+  bytesPerSecond: 0
+})
 window.api.downloadProgress((progressInfo: ProgressInfo) => {
   progress.value = progressInfo
+})
+window.api.updateDownloaded(() => {
+  config.isUpdated = false
+  config.isUpdating = false
 })
 </script>
 
 <template>
-  <main
-    v-if="progress"
-    class="p-5 w-screen h-screen absolute z-30 flex flex-col justify-center shadow-inner bg-gray-100 rounded-lg"
-  >
-    <h1 class="py-3 text-center font-bold opacity-60 text-sm font-mono">下载更新包</h1>
-    <el-progress :percentage="progress.percent" :stroke-width="26" :text-inside="true" />
-    <div class="mt-5 flex justify-center">
-      <a
-        href="https://github.com/bluef1ash/automation-click/releases"
-        target="_blank"
-        class="bg-violet-600 py-2 px-4 rounded-md text-white text-sm hover:bg-violet-500"
-        >官网下载</a
-      >
-    </div>
-  </main>
+  <el-progress
+    v-if="useConfigStore.isUpdating"
+    :percentage="progress.percent"
+    stroke-width="2"
+    :show-text="false"
+  />
 </template>
 
-<style lang="scss"></style>
+<style scoped lang="less"></style>

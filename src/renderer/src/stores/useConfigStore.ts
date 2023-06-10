@@ -5,7 +5,9 @@ export const useConfigStore = defineStore('counter', () => {
   const config = ref({
     page: 'analyze',
     runBtnIsDisabled: false,
-    chromePath: { executablePath: '', type: '' }
+    chromePath: { executablePath: '', type: '' },
+    isUpdated: false,
+    isUpdating: false
   })
 
   const updateConfig = (): void => {}

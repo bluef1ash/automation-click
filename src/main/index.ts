@@ -3,7 +3,8 @@ import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
-import { log } from 'electron-log'
+import { autoUpdater } from 'electron-updater'
+import log from 'electron-log'
 import './window'
 import './autoUpdater'
 import './analyze'
@@ -52,9 +53,9 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html')).then()
   }
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  log.initialize({ spyRendererConsole: true })
+  log.initialize()
+  //检查是否有更新
+  autoUpdater.checkForUpdates().then()
 }
 
 app.whenReady().then(() => {
@@ -63,8 +64,10 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
   createWindow()
-  app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+    }
   })
 })
 

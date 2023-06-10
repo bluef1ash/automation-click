@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import { ProgressInfo } from 'electron-updater'
+import { ProgressInfo, UpdateInfo } from 'electron-updater'
 import { FindChromeTyping } from '../utils/find_chrome'
 
 const api = {
@@ -26,14 +26,21 @@ const api = {
       callback(clickCountForWeb, clickCount)
     )
   },
+  updateAvailable: (callback: (updateInfo: UpdateInfo) => void): void => {
+    ipcRenderer.on('update-available', (_event, updateInfo: UpdateInfo) => callback(updateInfo))
+  },
+  downloadUpdate: (): void => {
+    ipcRenderer.send('download-update')
+  },
   contextMenu: (): void => {
-    ipcRenderer.send('contextMenu')
+    ipcRenderer.send('context-menu')
   },
   //下载进度条
   downloadProgress: (callback: (progress: ProgressInfo) => void): void => {
-    ipcRenderer.on('downloadProgress', (_event, progress) => {
-      callback(progress)
-    })
+    ipcRenderer.on('download-progress', (_event, progress) => callback(progress))
+  },
+  updateDownloaded: (callback: () => void): void => {
+    ipcRenderer.on('update-downloaded', () => callback())
   },
   minimize: (): void => {
     ipcRenderer.send('minimize')

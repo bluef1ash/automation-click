@@ -7,6 +7,8 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import resetMessage from '@utils/resetMessage'
 import { createApp } from 'vue'
 import App from './App.vue'
+import SvgIcon from '@renderer/components/SvgIcon.vue'
+import '@renderer/assets/iconfont.js'
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
@@ -14,4 +16,5 @@ const app = createApp(App)
 
 app.use(pinia).use(ElementPlus)
 app.config.globalProperties.$message = resetMessage
+app.component('SvgIcon', SvgIcon)
 app.mount('#app')

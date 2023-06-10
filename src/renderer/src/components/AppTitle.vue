@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import { ClickTap, Close, Config, Minus } from '@icon-park/vue-next'
 import { useConfigStore } from '@renderer/stores/useConfigStore'
 
@@ -13,28 +12,43 @@ const minimize = (): void => {
 const quit = (): void => {
   window.api.quit()
 }
+
+const update = (): void => {
+  window.api.downloadUpdate()
+}
 </script>
 
 <template>
-  <div class="flex justify-end title">
-    <config
-      v-if="configStore.page === 'analyze'"
-      title="设置"
-      theme="outline"
-      size="24"
-      class="icon"
-      @click="configStore.page = 'config'"
+  <div
+    :class="['flex', configStore.isUpdated ? 'justify-between' : 'justify-end', 'title']"
+    title="有新版本"
+  >
+    <svg-icon
+      v-if="configStore.isUpdated"
+      icon-name="icon-new"
+      class-name="icon new-update-icon"
+      @click="update"
     />
-    <click-tap
-      v-else
-      title="自动点击"
-      theme="outline"
-      size="24"
-      class="icon"
-      @click="configStore.page = 'analyze'"
-    />
-    <minus title="最小化" theme="outline" size="24" class="icon minus" @click="minimize" />
-    <close title="退出" theme="outline" size="24" class="icon close" @click="quit" />
+    <div class="flex justify-end">
+      <config
+        v-if="configStore.page === 'analyze'"
+        title="设置"
+        theme="outline"
+        size="24"
+        class="icon"
+        @click="configStore.page = 'config'"
+      />
+      <click-tap
+        v-else
+        title="自动点击"
+        theme="outline"
+        size="24"
+        class="icon"
+        @click="configStore.page = 'analyze'"
+      />
+      <minus title="最小化" theme="outline" size="24" class="icon minus" @click="minimize" />
+      <close title="退出" theme="outline" size="24" class="icon close" @click="quit" />
+    </div>
   </div>
 </template>
 
@@ -66,6 +80,17 @@ const quit = (): void => {
 
   .minus {
     align-items: end;
+  }
+
+  .new-update-icon {
+    height: 80px;
+    width: 80px;
+    font-size: 5em;
+    cursor: pointer;
+
+    &:hover {
+      background-color: transparent;
+    }
   }
 }
 </style>
