@@ -1,3 +1,5 @@
+import { AnalyzeResultStatus } from '../config/constant'
+
 export declare global {
   import { ElectronAPI } from '@electron-toolkit/preload'
   import { FindChromeTyping } from '../utils/find_chrome'
@@ -8,9 +10,10 @@ export declare global {
       analyze: (
         chromePath: FindChromeTyping,
         articleUrl: string,
-        articleClickNumber: number
+        articleClickNumber: number,
+        intervals: number
       ) => void
-      analyzeResult: (callback: (clickCount: string) => void) => void
+      analyzeResult: (callback: (status: AnalyzeResultStatus, clickCount: string) => void) => void
       findChrome: () => void
       findChromeResult: (callback: (findChromeTyping: FindChromeTyping) => void) => void
       openFindChromeDialog: () => string
@@ -22,6 +25,8 @@ export declare global {
       downloadProgress: (callback: (progress: ProgressInfo) => void) => void
       minimize: () => void
       quit: () => void
+      readClipboard: () => void
+      readClipboardResult: (callback: (result: string) => void) => void
     }
   }
 }

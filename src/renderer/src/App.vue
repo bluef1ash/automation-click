@@ -23,12 +23,10 @@ const contextMenu = (): void => window.api.contextMenu()
   <Suspense>
     <main class="relative" @contextmenu="contextMenu">
       <Updater />
-      <section>
-        <transition enter-active-class="animate__animated animate__flipInY">
-          <Analyze v-if="config.page === 'analyze'" />
-          <Setting v-else />
-        </transition>
-      </section>
+      <transition enter-active-class="animate__animated animate__flipInY">
+        <Analyze v-if="config.page === 'analyze'" />
+        <Setting v-else />
+      </transition>
     </main>
   </Suspense>
 </template>

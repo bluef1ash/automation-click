@@ -2,20 +2,21 @@ import { BrowserWindow, ipcMain } from 'electron'
 import PuppeteerHelper from '../utils/PuppeteerHelper'
 import { FindChromeTyping } from '../utils/find_chrome'
 import { PuppeteerNodeLaunchOptions } from 'puppeteer-core'
+import { AnalyzeResultStatus } from '../config/constant'
 
 ipcMain.on(
   'analyze',
-  (event, chromePath: string, articleUrl: string, articleClickNumber: number) => {
-    analyzer(JSON.parse(chromePath), articleUrl, articleClickNumber)
-      .then((result) => event.reply('analyze-result', result))
-      .catch(() => event.reply('analyze-result', '-1'))
-  }
+  (event, chromePath: string, articleUrl: string, articleClickNumber: number, intervals: number) =>
+    analyzer(JSON.parse(chromePath), articleUrl, articleClickNumber, intervals)
+      .then((result) => event.reply('analyze-result', AnalyzeResultStatus.SUCCESS, result))
+      .catch((reason) => event.reply('analyze-result', AnalyzeResultStatus.ERROR, reason.message))
 )
 
 const analyzer = async (
   { executablePath }: FindChromeTyping,
   url: string,
-  clickCount: number
+  clickCount: number,
+  intervals: number
 ): Promise<string> => {
   let clickCountForWeb = '0'
   const puppeteerLaunchOptions: PuppeteerNodeLaunchOptions = {
@@ -33,31 +34,33 @@ const analyzer = async (
     ]
   }
   const puppeteerHelper = PuppeteerHelper.getInstance(puppeteerLaunchOptions)
-  const headers = {
-    'User-Agent':
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36'
-  }
   for (let i = 0; i < clickCount; i++) {
     await puppeteerHelper.collect({
       url,
-      headers,
-      async prefixCcallBack(page) {
-        await page.setCacheEnabled(false)
+      interception: true,
+      async prefixCallBack(page) {
+        await puppeteerHelper.camouflageBrowser(page)
       },
-      async suffixCcallBack(page) {
+      async suffixCallBack(page) {
         clickCountForWeb = await page.evaluate((u) => {
+          let element: HTMLElement | null = null
           if (u.indexOf('club.autohome') > -1) {
-            const elementName = 'span.post-handle-view strong'
-            const clickNum = document.querySelector(elementName)!.innerHTML
-            return clickNum
+            const elementName = 'span.post-handle-view > strong'
+            element = document.querySelector(elementName)
           }
-          return '0'
+          if (element === null) {
+            throw new Error('找不到对应的标签')
+          }
+          return element.innerHTML
         }, url)
-        BrowserWindow.getAllWindows().map((w) =>
-          w.webContents.send('click-count', clickCountForWeb, i + 1)
-        )
       }
     })
+    BrowserWindow.getAllWindows().map((w) =>
+      w.webContents.send('click-count', clickCountForWeb, i + 1)
+    )
+    if (clickCount - i > 1) {
+      await puppeteerHelper.intervals(intervals)
+    }
   }
   return clickCountForWeb
 }

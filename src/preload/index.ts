@@ -2,13 +2,27 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { ProgressInfo, UpdateInfo } from 'electron-updater'
 import { FindChromeTyping } from '../utils/find_chrome'
+import { AnalyzeResultStatus } from '../config/constant'
 
 const api = {
-  analyze: (chromePath: FindChromeTyping, articleUrl: string, articleClickNumber: number): void => {
-    ipcRenderer.send('analyze', JSON.stringify(chromePath), articleUrl, articleClickNumber)
+  analyze: (
+    chromePath: FindChromeTyping,
+    articleUrl: string,
+    articleClickNumber: number,
+    intervals: number
+  ): void => {
+    ipcRenderer.send(
+      'analyze',
+      JSON.stringify(chromePath),
+      articleUrl,
+      articleClickNumber,
+      intervals
+    )
   },
-  analyzeResult: (callback: (clickCount: string) => void): void => {
-    ipcRenderer.on('analyze-result', (_event, clickCount: string) => callback(clickCount))
+  analyzeResult: (callback: (status: AnalyzeResultStatus, clickCount: string) => void): void => {
+    ipcRenderer.on('analyze-result', (_event, status: AnalyzeResultStatus, clickCount: string) =>
+      callback(status, clickCount)
+    )
   },
   findChrome: (): void => {
     ipcRenderer.send('find-chrome')
@@ -48,6 +62,12 @@ const api = {
   //退出应用
   quit: (): void => {
     ipcRenderer.send('quit')
+  },
+  readClipboard: (): void => {
+    ipcRenderer.send('read-clipboard')
+  },
+  readClipboardResult: (callback: (result: string) => void): void => {
+    ipcRenderer.on('read-clipboard-result', (_event, result) => callback(result))
   }
 }
 

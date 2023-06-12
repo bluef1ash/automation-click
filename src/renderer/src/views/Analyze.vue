@@ -25,10 +25,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="main-container">
+  <el-container direction="vertical">
     <AppTitle />
     <AnalyzeMain />
-  </div>
+  </el-container>
 </template>
 
 <style scoped lang="less"></style>

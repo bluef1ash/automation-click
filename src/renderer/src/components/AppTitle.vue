@@ -19,16 +19,10 @@ const update = (): void => {
 </script>
 
 <template>
-  <div
-    :class="['flex', configStore.isUpdated ? 'justify-between' : 'justify-end', 'title']"
-    title="有新版本"
-  >
-    <svg-icon
-      v-if="configStore.isUpdated"
-      icon-name="icon-new"
-      class-name="icon new-update-icon"
-      @click="update"
-    />
+  <el-header :class="['flex', configStore.isUpdated ? 'justify-between' : 'justify-end', 'title']">
+    <div title="有新版本" class="new-update-icon">
+      <svg-icon v-if="configStore.isUpdated" icon-name="icon-new" @click="update" />
+    </div>
     <div class="flex justify-end">
       <config
         v-if="configStore.page === 'analyze'"
@@ -49,10 +43,14 @@ const update = (): void => {
       <minus title="最小化" theme="outline" size="24" class="icon minus" @click="minimize" />
       <close title="退出" theme="outline" size="24" class="icon close" @click="quit" />
     </div>
-  </div>
+  </el-header>
 </template>
 
 <style scoped lang="less">
+.el-header {
+  --el-header-padding: 0;
+}
+
 .title {
   -webkit-app-region: drag;
   height: v-bind(height);
@@ -86,6 +84,7 @@ const update = (): void => {
     height: 80px;
     width: 80px;
     font-size: 5em;
+    -webkit-app-region: no-drag;
     cursor: pointer;
 
     &:hover {
