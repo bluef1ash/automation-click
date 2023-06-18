@@ -49,6 +49,9 @@ const api = {
   contextMenu: (): void => {
     ipcRenderer.send('context-menu')
   },
+  updateRequest: (callback: (isDownload: boolean) => void): void => {
+    ipcRenderer.on('update-request', (_event, isDownload: boolean) => callback(isDownload))
+  },
   //下载进度条
   downloadProgress: (callback: (progress: ProgressInfo) => void): void => {
     ipcRenderer.on('download-progress', (_event, progress) => callback(progress))

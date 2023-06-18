@@ -29,8 +29,9 @@ const analyzer = async (
       '--disable-setuid-sandbox',
       '--no-first-run',
       '--no-sandbox',
-      '--no-zygote'
-      // '--single-process'
+      '--no-zygote',
+      '--single-process'
+      // '--proxy-server=http://:8080'
     ]
   }
   const puppeteerHelper = PuppeteerHelper.getInstance(puppeteerLaunchOptions)

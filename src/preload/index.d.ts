@@ -22,6 +22,7 @@ export declare global {
       downloadUpdate: () => void
       updateDownloaded: (callback: () => void) => void
       contextMenu: () => void
+      updateRequest: (callback: (isDownload: boolean) => void) => void
       downloadProgress: (callback: (progress: ProgressInfo) => void) => void
       minimize: () => void
       quit: () => void

@@ -21,7 +21,7 @@ const contextMenu = (): void => window.api.contextMenu()
 
 <template>
   <Suspense>
-    <main class="relative" @contextmenu="contextMenu">
+    <main class="relative h-screen" @contextmenu="contextMenu">
       <Updater />
       <transition enter-active-class="animate__animated animate__flipInY">
         <Analyze v-if="config.page === 'analyze'" />

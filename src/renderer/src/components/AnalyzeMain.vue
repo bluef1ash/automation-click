@@ -9,7 +9,7 @@ const { config } = useConfigStore()
 const { proxy } = useCurrentInstance()
 const articleUrl = ref<string>('')
 const articleClickNumber = ref<number>(1)
-const intervals = ref<number>(30)
+const intervals = ref<number>(2)
 const runBtnIsLoading = ref<boolean>(false)
 const analyzeHandle = async (): Promise<void> => {
   if (!/^[A-z]+:\/\/\S*$/g.test(articleUrl.value)) {
@@ -43,8 +43,8 @@ const pasteArticleUrl = (): void => {
 </script>
 
 <template>
-  <el-main class="flex flex-col justify-between bg-main">
-    <el-row class="mb-6 flex items-center">
+  <el-main class="bg-main flex flex-col justify-between">
+    <el-row class="items-center">
       <el-col :span="22">
         <el-input v-model="articleUrl" placeholder="请输入需要点击的文章地址" size="large" />
       </el-col>
@@ -52,7 +52,7 @@ const pasteArticleUrl = (): void => {
         <notebook theme="outline" size="24" title="粘贴" class="paste" @click="pasteArticleUrl" />
       </el-col>
     </el-row>
-    <el-row class="flex items-center justify-between mb-6">
+    <el-row class="items-center justify-between">
       <label for="article_click_number" class="input-label">刷新次数</label>
       <el-input-number
         id="article_click_number"

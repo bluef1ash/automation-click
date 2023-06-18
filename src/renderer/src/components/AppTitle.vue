@@ -20,8 +20,8 @@ const update = (): void => {
 
 <template>
   <el-header :class="['flex', configStore.isUpdated ? 'justify-between' : 'justify-end', 'title']">
-    <div title="有新版本" class="new-update-icon">
-      <svg-icon v-if="configStore.isUpdated" icon-name="icon-new" @click="update" />
+    <div v-if="configStore.isUpdated" title="有新版本" class="new-update-icon">
+      <svg-icon icon-name="icon-new" @click="update" />
     </div>
     <div class="flex justify-end">
       <config

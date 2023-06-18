@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { ProgressInfo } from 'builder-util-runtime/out/ProgressCallbackTransform'
-import { useConfigStore } from '../stores/useConfigStore'
+import { useConfigStore } from '@renderer/stores/useConfigStore'
 
 const { config } = useConfigStore()
 //下载进度条
@@ -12,12 +12,21 @@ const progress = ref<ProgressInfo>({
   percent: 0,
   bytesPerSecond: 0
 })
-window.api.downloadProgress((progressInfo: ProgressInfo) => {
-  progress.value = progressInfo
-})
-window.api.updateDownloaded(() => {
-  config.isUpdated = false
-  config.isUpdating = false
+onMounted(() => {
+  window.api.updateRequest((isDownload: boolean) => {
+    if (isDownload) {
+      config.isUpdating = true
+      config.isUpdated = false
+      return
+    }
+    config.isUpdating = false
+  })
+  window.api.downloadProgress((progressInfo: ProgressInfo) => {
+    console.log(progressInfo, 111)
+    if (typeof progressInfo !== 'undefined') {
+      progress.value = progressInfo
+    }
+  })
 })
 </script>
 
@@ -25,8 +34,9 @@ window.api.updateDownloaded(() => {
   <el-progress
     v-if="config.isUpdating"
     :percentage="progress.percent"
-    stroke-width="2"
+    :stroke-width="2"
     :show-text="false"
+    color="#ff0000"
   />
 </template>
 

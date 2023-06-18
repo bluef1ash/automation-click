@@ -44,6 +44,7 @@ ipcMain.on('download-update', (): void => {
     )
     .then((res) => {
       if (res.response === 0) {
+        BrowserWindow.getAllWindows().map((win) => win.webContents.send('update-request', true))
         //开始下载更新
         autoUpdater.downloadUpdate().then()
       }

@@ -1,4 +1,4 @@
-import { dialog, ipcMain } from 'electron'
+import { BrowserWindow, dialog, ipcMain } from 'electron'
 import findChrome from '../utils/find_chrome'
 
 ipcMain.on('find-chrome', (event) => {
@@ -7,16 +7,21 @@ ipcMain.on('find-chrome', (event) => {
 
 ipcMain.on('open-find-chrome-dialog', (event) => {
   dialog
-    .showOpenDialog({
-      title: '请选择 Chrome 浏览器的可执行文件',
-      defaultPath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
-      filters: [
-        {
-          name: 'chrome',
-          extensions: ['exe', 'app', '']
-        }
-      ]
-    })
+    .showOpenDialog(
+      new BrowserWindow({
+        show: false,
+        alwaysOnTop: true
+      }),
+      {
+        title: '请选择 Chrome 浏览器的可执行文件',
+        filters: [
+          {
+            name: 'chrome',
+            extensions: ['exe', 'app', '']
+          }
+        ]
+      }
+    )
     .then((result) => {
       event.returnValue = result.filePaths[0]
     })

@@ -25,7 +25,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-container direction="vertical">
+  <el-container direction="vertical" class="h-full">
     <AppTitle />
     <AnalyzeMain />
   </el-container>

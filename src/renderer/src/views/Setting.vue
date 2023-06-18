@@ -4,10 +4,10 @@ import SettingMain from '@renderer/components/SettingMain.vue'
 </script>
 
 <template>
-  <div class="main-container">
+  <el-container direction="vertical" class="h-full">
     <AppTitle />
     <SettingMain />
-  </div>
+  </el-container>
 </template>
 
 <style scoped lang="less"></style>

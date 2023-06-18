@@ -2,4 +2,4 @@ owner: bluef1ash
 repo: automation-click
 provider: github
 releaseType: release
-updaterCacheDirName: automation-updater
+updaterCacheDirName: automation-click-updater

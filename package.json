@@ -1,6 +1,6 @@
 {
   "name": "automation-click",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "自动点击小程序",
   "main": "./out/main/index.js",
   "author": "廿二月的天",
@@ -12,7 +12,7 @@
     "typecheck:web": "vue-tsc --noEmit -p tsconfig.web.json --composite false",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
-    "dev": "electron-vite dev",
+    "dev": "electron-vite dev --watch",
     "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "build:win": "npm run build && electron-builder --win --config",
