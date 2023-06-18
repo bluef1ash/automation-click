@@ -55,7 +55,7 @@ jobs:
       - name: Cleanup Artifacts for Windows
         if: matrix.os == 'windows-latest'
         run: |
-          npx del-cli "dist/*" "!dist/(*.exe|*.zip|*.yml|*.blockmap)"
+          npx del-cli "dist/*" "!dist/*.exe" "!dist/*.zip" "!dist/*.yml" "!dist/*.blockmap"
 
       - name: Cleanup Artifacts for MacOS
         if: matrix.os == 'macos-latest'
