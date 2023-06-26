@@ -9,14 +9,16 @@ const api = {
     chromePath: FindChromeTyping,
     articleUrl: string,
     articleClickNumber: number,
-    intervals: number
+    intervals: number,
+    isChromeVisible: boolean
   ): void => {
     ipcRenderer.send(
       'analyze',
       JSON.stringify(chromePath),
       articleUrl,
       articleClickNumber,
-      intervals
+      intervals,
+      isChromeVisible
     )
   },
   analyzeResult: (callback: (status: AnalyzeResultStatus, clickCount: string) => void): void => {

@@ -6,8 +6,15 @@ import { AnalyzeResultStatus } from '../config/constant'
 
 ipcMain.on(
   'analyze',
-  (event, chromePath: string, articleUrl: string, articleClickNumber: number, intervals: number) =>
-    analyzer(JSON.parse(chromePath), articleUrl, articleClickNumber, intervals)
+  (
+    event,
+    chromePath: string,
+    articleUrl: string,
+    articleClickNumber: number,
+    intervals: number,
+    isChromeVisible: boolean
+  ) =>
+    analyzer(JSON.parse(chromePath), articleUrl, articleClickNumber, intervals, isChromeVisible)
       .then((result) => event.reply('analyze-result', AnalyzeResultStatus.SUCCESS, result))
       .catch((reason) => event.reply('analyze-result', AnalyzeResultStatus.ERROR, reason.message))
 )
@@ -16,11 +23,12 @@ const analyzer = async (
   { executablePath }: FindChromeTyping,
   url: string,
   clickCount: number,
-  intervals: number
+  intervals: number,
+  isChromeVisible: boolean
 ): Promise<string> => {
   let clickCountForWeb = '0'
   const puppeteerLaunchOptions: PuppeteerNodeLaunchOptions = {
-    headless: 'new',
+    headless: isChromeVisible ? false : 'new',
     executablePath,
     ignoreDefaultArgs: ['--enable-automation'],
     args: [
@@ -38,7 +46,6 @@ const analyzer = async (
   for (let i = 0; i < clickCount; i++) {
     await puppeteerHelper.collect({
       url,
-      interception: true,
       async prefixCallBack(page) {
         await puppeteerHelper.camouflageBrowser(page)
       },

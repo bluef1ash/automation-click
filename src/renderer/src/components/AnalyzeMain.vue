@@ -21,12 +21,13 @@ const analyzeHandle = async (): Promise<void> => {
     config.chromePath,
     articleUrl.value,
     articleClickNumber.value,
-    intervals.value * 1000
+    intervals.value * 1000,
+    config.isChromeVisible
   )
   window.api.clickCount((clickCountForWeb: string, clickCount: number) => {
     proxy.$message.info(`文章点击次数为：${clickCountForWeb}，程序点击次数：${clickCount}`)
   })
-  window.api.analyzeResult((status, clickCount) => {
+  window.api.analyzeResult((status: AnalyzeResultStatus, clickCount: string) => {
     if (status === AnalyzeResultStatus.SUCCESS) {
       proxy.$message.success('运行完成，最后一次点击量为：' + clickCount)
     } else {

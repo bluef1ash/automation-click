@@ -7,7 +7,8 @@ export const useConfigStore = defineStore('counter', () => {
     runBtnIsDisabled: false,
     chromePath: { executablePath: '', type: '' },
     isUpdated: false,
-    isUpdating: false
+    isUpdating: false,
+    isChromeVisible: false
   })
 
   const updateConfig = (): void => {}

@@ -11,7 +11,8 @@ export declare global {
         chromePath: FindChromeTyping,
         articleUrl: string,
         articleClickNumber: number,
-        intervals: number
+        intervals: number,
+        isChromeVisible: boolean
       ) => void
       analyzeResult: (callback: (status: AnalyzeResultStatus, clickCount: string) => void) => void
       findChrome: () => void
