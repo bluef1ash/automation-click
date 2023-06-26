@@ -438,7 +438,7 @@ class PuppeteerHelper {
       // @ts-ignore
       throw new Error(error.message)
     } finally {
-      // await page.close()
+      await page.close()
     }
   }
 
