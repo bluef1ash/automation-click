@@ -1,6 +1,6 @@
 {
   "name": "automation-click",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "自动点击小程序",
   "main": "./out/main/index.js",
   "author": "廿二月的天",
@@ -29,6 +29,7 @@
     "electron-log": "^5.0.0-beta.2",
     "electron-updater": "^5.3.0",
     "element-plus": "^2.3.5",
+    "lodash": "^4.17.21",
     "pinia": "^2.1.3",
     "pinia-plugin-persistedstate": "^3.1.0",
     "puppeteer-core": "^19.11.1"

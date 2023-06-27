@@ -20,15 +20,15 @@ const contextMenu = (): void => window.api.contextMenu()
 </script>
 
 <template>
-  <Suspense>
+  <suspense>
     <main class="relative h-screen" @contextmenu="contextMenu">
-      <Updater />
+      <updater />
       <transition enter-active-class="animate__animated animate__flipInY">
-        <Analyze v-if="config.page === 'analyze'" />
-        <Setting v-else />
+        <analyze v-if="config.page === 'analyze'" />
+        <setting v-else />
       </transition>
     </main>
-  </Suspense>
+  </suspense>
 </template>
 
 <style lang="less">

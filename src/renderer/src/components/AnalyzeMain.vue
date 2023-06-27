@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { Notebook } from '@icon-park/vue-next'
 import { useConfigStore } from '@renderer/stores/useConfigStore'
 import useCurrentInstance from '@renderer/global/useCurrentInstance'
@@ -9,8 +9,33 @@ const { config } = useConfigStore()
 const { proxy } = useCurrentInstance()
 const articleUrl = ref<string>('')
 const articleClickNumber = ref<number>(1)
-const intervals = ref<number>(2)
+const intervals = ref<number>(0)
 const runBtnIsLoading = ref<boolean>(false)
+const isRandomIntervalsDisabled = ref<boolean>(true)
+const intervalsDisabled = ref<boolean>(true)
+
+watch(intervals, (value) => {
+  if (value === 0) {
+    config.isRandomIntervals = false
+    isRandomIntervalsDisabled.value = true
+  } else {
+    isRandomIntervalsDisabled.value = false
+  }
+})
+
+watch(articleClickNumber, (value) => {
+  if (value === 1) {
+    intervals.value = 0
+    intervalsDisabled.value = true
+    config.isRandomIntervals = false
+    isRandomIntervalsDisabled.value = true
+  } else {
+    intervals.value = 2
+    intervalsDisabled.value = false
+    isRandomIntervalsDisabled.value = false
+  }
+})
+
 const analyzeHandle = async (): Promise<void> => {
   if (!/^[A-z]+:\/\/\S*$/g.test(articleUrl.value)) {
     proxy.$message.error('请输入正确的文章链接')
@@ -22,6 +47,7 @@ const analyzeHandle = async (): Promise<void> => {
     articleUrl.value,
     articleClickNumber.value,
     intervals.value * 1000,
+    config.isRandomIntervals,
     config.isChromeVisible
   )
   window.api.clickCount((clickCountForWeb: string, clickCount: number) => {
@@ -54,16 +80,31 @@ const pasteArticleUrl = (): void => {
       </el-col>
     </el-row>
     <el-row class="items-center justify-between">
-      <label for="article_click_number" class="input-label">刷新次数</label>
-      <el-input-number
-        id="article_click_number"
-        v-model="articleClickNumber"
-        :min="1"
-        :max="100000"
-      />
-      <label for="intervals" class="input-label">间隔时间</label>
-      <el-input-number id="intervals" v-model="intervals" :min="0" />
-      <label for="intervals" class="input-label">秒</label>
+      <el-col :span="12">
+        <label for="article_click_number" class="input-label">刷新次数</label>
+        <el-input-number
+          id="article_click_number"
+          v-model="articleClickNumber"
+          :min="1"
+          :max="100000"
+        />
+      </el-col>
+      <el-col :span="12">
+        <label for="intervals" class="input-label">间隔时间</label>
+        <el-input-number
+          id="intervals"
+          v-model="intervals"
+          :min="0"
+          :disabled="intervalsDisabled"
+        />
+        <label for="intervals" class="input-label">秒</label>
+        <el-checkbox
+          v-model="config.isRandomIntervals"
+          :disabled="isRandomIntervalsDisabled"
+          label="是否随机间隔时间"
+          title="不超过设置的时间"
+        />
+      </el-col>
     </el-row>
     <el-row>
       <el-button

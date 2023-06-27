@@ -10,6 +10,7 @@ const api = {
     articleUrl: string,
     articleClickNumber: number,
     intervals: number,
+    isRandomIntervals: boolean,
     isChromeVisible: boolean
   ): void => {
     ipcRenderer.send(
@@ -18,6 +19,7 @@ const api = {
       articleUrl,
       articleClickNumber,
       intervals,
+      isRandomIntervals,
       isChromeVisible
     )
   },

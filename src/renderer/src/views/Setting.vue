@@ -5,8 +5,8 @@ import SettingMain from '@renderer/components/SettingMain.vue'
 
 <template>
   <el-container direction="vertical" class="h-full">
-    <AppTitle />
-    <SettingMain />
+    <app-title />
+    <setting-main />
   </el-container>
 </template>
 

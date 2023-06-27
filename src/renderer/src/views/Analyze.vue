@@ -26,8 +26,8 @@ onMounted(() => {
 
 <template>
   <el-container direction="vertical" class="h-full">
-    <AppTitle />
-    <AnalyzeMain />
+    <app-title />
+    <analyze-main />
   </el-container>
 </template>
 

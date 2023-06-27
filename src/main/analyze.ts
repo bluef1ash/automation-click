@@ -3,6 +3,7 @@ import PuppeteerHelper from '../utils/PuppeteerHelper'
 import { FindChromeTyping } from '../utils/find_chrome'
 import { PuppeteerNodeLaunchOptions } from 'puppeteer-core'
 import { AnalyzeResultStatus } from '../config/constant'
+import { random } from 'lodash'
 
 ipcMain.on(
   'analyze',
@@ -12,9 +13,17 @@ ipcMain.on(
     articleUrl: string,
     articleClickNumber: number,
     intervals: number,
+    isRandomIntervals: boolean,
     isChromeVisible: boolean
   ) =>
-    analyzer(JSON.parse(chromePath), articleUrl, articleClickNumber, intervals, isChromeVisible)
+    analyzer(
+      JSON.parse(chromePath),
+      articleUrl,
+      articleClickNumber,
+      intervals,
+      isRandomIntervals,
+      isChromeVisible
+    )
       .then((result) => event.reply('analyze-result', AnalyzeResultStatus.SUCCESS, result))
       .catch((reason) => event.reply('analyze-result', AnalyzeResultStatus.ERROR, reason.message))
 )
@@ -24,6 +33,7 @@ const analyzer = async (
   url: string,
   clickCount: number,
   intervals: number,
+  isRandomIntervals: boolean,
   isChromeVisible: boolean
 ): Promise<string> => {
   let clickCountForWeb = '0'
@@ -67,7 +77,11 @@ const analyzer = async (
       w.webContents.send('click-count', clickCountForWeb, i + 1)
     )
     if (clickCount - i > 1) {
-      await puppeteerHelper.intervals(intervals)
+      let randomIntervals = intervals
+      if (isRandomIntervals) {
+        randomIntervals = random(1, intervals)
+      }
+      await puppeteerHelper.intervals(randomIntervals)
     }
   }
   return clickCountForWeb

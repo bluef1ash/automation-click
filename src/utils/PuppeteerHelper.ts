@@ -592,7 +592,9 @@ class PuppeteerHelper {
    * @param ms
    */
   public async intervals(ms: number): Promise<void> {
-    await new Promise((resolve) => setTimeout(resolve, ms))
+    if (ms > 0) {
+      await new Promise((resolve) => setTimeout(resolve, ms))
+    }
   }
 }
 

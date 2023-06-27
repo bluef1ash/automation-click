@@ -12,6 +12,7 @@ export declare global {
         articleUrl: string,
         articleClickNumber: number,
         intervals: number,
+        isRandomIntervals: boolean,
         isChromeVisible: boolean
       ) => void
       analyzeResult: (callback: (status: AnalyzeResultStatus, clickCount: string) => void) => void

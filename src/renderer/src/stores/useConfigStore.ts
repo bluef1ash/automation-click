@@ -8,7 +8,8 @@ export const useConfigStore = defineStore('counter', () => {
     chromePath: { executablePath: '', type: '' },
     isUpdated: false,
     isUpdating: false,
-    isChromeVisible: false
+    isChromeVisible: false,
+    isRandomIntervals: false
   })
 
   const updateConfig = (): void => {}
